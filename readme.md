@@ -1,4 +1,4 @@
-# Poroiect: Profit_Prediction_Engine
+# Proiect: Profit_Prediction_Engine
 
 ➡️ Problema:    Predictia profitului este dificila din cauza variatiilor de discount si sezonalitate.
 ➡️ Solutia:     Un pipeline de date ‘Zero-Leakage’ care separa strict istoricul de viitor.
