@@ -2,12 +2,11 @@ import gradio as gr
 import pandas as pd
 import numpy as np
 import joblib
-import os
 
-# ── path relativ la radacina proiectului ──────────────────────────────────────
+
 MODEL_PATH ='../models/profit_prediction_engine_HGBRegressor_final.pkl'
 
-# ── mapare sub-categorie → categorie ─────────────────────────────────────────
+
 CAT_MAP = {
     "Chairs": "Furniture", "Tables": "Furniture", "Bookcases": "Furniture",
     "Furnishings": "Furniture", "Supplies": "Office Supplies",
@@ -46,7 +45,7 @@ def predict(sales, discount, quantity,
     if model_pack is None:
         return "❌ Apasa mai intai 'Incarca Model'.", "", "", ""
 
-    # ── lookups din model ─────────────────────────────────────────────────────
+
     rsr = model_pack["risk_subcat_region"]
     rc  = model_pack["risk_category"]
     sp  = model_pack["ship_profit"]
@@ -68,7 +67,6 @@ def predict(sales, discount, quantity,
 
     p_margin_est = float(cust_avg_margin)
 
-    # ── construire rand ───────────────────────────────────────────────────────
     row = {
         "sales":              float(sales),
         "discount":           float(discount),
@@ -113,7 +111,6 @@ def predict(sales, discount, quantity,
 
     df = pd.DataFrame([row])
 
-    # ── clustering ────────────────────────────────────────────────────────────
     clust_input = pd.DataFrame(
         [[float(sales), p_margin_est, float(discount),
           float(cust_avg_margin), float(cust_loss_rate)]],
@@ -128,7 +125,6 @@ def predict(sales, discount, quantity,
     feats  = model_pack["features_list"]
     mfeats = model_pack["meta_features"]
 
-    # ── expert ────────────────────────────────────────────────────────────────
     if segment in model_pack["experts"]:
         pred_ex = model_pack["experts"][segment].predict(df[feats])
         marg_ex = pt.inverse_transform(
@@ -140,14 +136,12 @@ def predict(sales, discount, quantity,
         ep      = 0.0
         alpha   = 0.0
 
-    # ── meta-model ────────────────────────────────────────────────────────────
     pred_mt = model_pack["meta_model"].predict(df[mfeats])
     marg_mt = pt.inverse_transform(
         pd.DataFrame(pred_mt, columns=["margin_w"])
     ).ravel()
     mp = marg_mt[0] * float(sales)
 
-    # ── blend final ───────────────────────────────────────────────────────────
     fp = alpha * ep + (1 - alpha) * mp
     fm = alpha * marg_ex[0] + (1 - alpha) * marg_mt[0]
 
@@ -160,9 +154,6 @@ def predict(sales, discount, quantity,
     return out_final, out_segment, out_expert, out_meta
 
 
-# ══════════════════════════════════════════════════════════════════════════════
-# UI
-# ══════════════════════════════════════════════════════════════════════════════
 with gr.Blocks(title="Profit Prediction Engine", theme=gr.themes.Soft()) as demo:
 
     gr.Markdown("# 📦 Profit Prediction Engine")
