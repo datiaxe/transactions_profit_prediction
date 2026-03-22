@@ -23,7 +23,7 @@
 │   ├── model_Sequential.py                                 # Feature engineering model Sequential
 │   ├── model_RandomForestRegressor.py                      # Feature engineering model RandomForerst
 │   ├── MODEL_FINAL_HistGradientBoostingRegressor.py       	# Feature engineering, antrenare si rualre meod final HGBR
-	└── simulare_gradio_model_final.py        				# Simularea in Gradio.app a modlulului salvat cu input date utilizator
+	└── simulare_gradio_model_final.py        				# Simularea cu input manual a modelulului final salvat
 ├── models/                                             # Fisierele modelelor salvate (Sequntial draft si HGBR final)
 ├── requirements.txt                                    # Lista dependintelor
 └── README.md
