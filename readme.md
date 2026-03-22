@@ -9,7 +9,7 @@
 	                - sezonalitate
 	                - comportament client
 
-## 1. Structura Proiectului
+## Structura Proiectului
 
 ├── data/                                               # Datasets    
 │   ├── raw_data/                                           # Datele brute, neprocesate
